@@ -20,6 +20,11 @@ class Model {
     updateView(str) {
         this.view.updateView(str);
     }
+
+    clear() {
+        this.store = "0";
+        this.view.updateDisplay(this.store);
+    }
 }
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
@@ -31,9 +36,6 @@ class Controller {
         this.__this__ = this
     };
 
-    clear() {
-        this.controller.model.store === "0"
-    }
 
 }
 
@@ -60,13 +62,13 @@ class View {
 
     numberClick(e) {
         if (e.target.textContent === "C") {
-            this.controller.model.store.clear()
+            this.controller.model.clear();
+            this.updateDisplay(this.controller.model.store)
         } else {
             this.controller.model.store += e.target.textContent
             this.updateDisplay(this.controller.model.store)
         }
     }
-
 
 
 
