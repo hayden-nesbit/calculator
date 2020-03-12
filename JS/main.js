@@ -7,11 +7,10 @@ app.className = "container"
 //needs to store textContent of each btn on click in array
 //needs to update output for value of each click AND store total of all values clicked
 
-let clickArr = [];
-
 class Model {
     constructor() {
         this.view = null;
+        this.store = "";
     };
 
     setView(view) {
@@ -20,11 +19,7 @@ class Model {
 
     updateView(str) {
         this.view.updateView(str);
-
     }
-
-
-
 }
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
@@ -35,37 +30,6 @@ class Controller {
         this.currentValue = 0;
         this.__this__ = this
     };
-
-    numberClick(e) {
-
-        this.updateDisplay(e.target.textContent)
-
-    }
-
-    add() {
-
-    }
-
-    subtract() {
-
-    }
-
-    multiply() {
-
-    }
-
-    divide() {
-
-    }
-
-    equals() {
-
-    }
-
-    decimal() {
-
-    }
-
 }
 
 // <------------------------------------------UI - VISUAL CALCULATOR OBJECT--------------------------------------------->
@@ -88,6 +52,13 @@ class View {
         this.display = currentValue
         document.getElementById("output").innerHTML = this.display
     }
+
+    numberClick(e) {
+        this.controller.model.store += e.target.textContent
+        this.updateDisplay(this.controller.model.store)
+    }
+
+
 
 
     buildCalculator() {
@@ -123,9 +94,15 @@ class View {
             let row2 = this.buildElement("div", "row", "", "")
             mainDiv.appendChild(row2)
             for (let j = 0; j < 4; j++) {
-                col = this.buildElement("button", "col border rounded-circle h5 m-1 bg-white", "btn" + k, calcBtns[k]);
+                col = this.buildElement("button", "col border rounded-circle h5 m-1 bg-light", "btn" + k, calcBtns[k]);
                 if (!(k === 1 || k === 2 || k === 17)) {
-                    col.addEventListener("click", this.controller.numberClick.bind(this));
+                    col.addEventListener("click", this.numberClick.bind(this));
+                    col.classList.remove("bg-light")
+                    col.classList.add("bg-white")
+                }
+                if (k === 3 || k === 7 || k === 11 || k === 15 || k === 19) {
+                    col.classList.remove("bg-white")
+                    col.classList.add("bg-warning")
                 }
                 k++
                 row2.appendChild(col)
@@ -134,7 +111,6 @@ class View {
 
         let col3 = this.buildElement("div", "col-md-4", "", "")
         row1.appendChild(col3)
-
     }
 }
 
@@ -148,8 +124,6 @@ function init() {
     let controller = new Controller(model);
     let view = new View(controller);
     model.setView(view);
-
-    console.log({ model, view, controller })
 
     //populate screen
     view.buildCalculator();
