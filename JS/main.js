@@ -30,6 +30,11 @@ class Controller {
         this.currentValue = 0;
         this.__this__ = this
     };
+
+    clear() {
+        this.controller.model.store === "0"
+    }
+
 }
 
 // <------------------------------------------UI - VISUAL CALCULATOR OBJECT--------------------------------------------->
@@ -54,8 +59,12 @@ class View {
     }
 
     numberClick(e) {
-        this.controller.model.store += e.target.textContent
-        this.updateDisplay(this.controller.model.store)
+        if (e.target.textContent === "C") {
+            this.controller.model.store.clear()
+        } else {
+            this.controller.model.store += e.target.textContent
+            this.updateDisplay(this.controller.model.store)
+        }
     }
 
 
@@ -72,16 +81,16 @@ class View {
         let col2 = this.buildElement("div", "col-md-4", "", "")
         row1.appendChild(col2)
 
-        let mainDiv = this.buildElement("div", "container border rounded mt-5 p-4 mb-5 bg-secondary", "", "")
+        let mainDiv = this.buildElement("div", "container border rounded mt-5 p-4 mb-5", "mainDiv", "")
         col2.appendChild(mainDiv)
 
-        let calcDiv = this.buildElement("div", "div", "", "")
+        let calcDiv = this.buildElement("div", "div", "main", "")
         mainDiv.appendChild(calcDiv)
 
         let rowA = this.buildElement("div", "row", "", "")
         mainDiv.appendChild(rowA)
 
-        let colB = this.buildElement("div", "col-md-12 border rounded mb-2 bg-white text-right", "output", this.display)
+        let colB = this.buildElement("div", "col-md-12 rounded mb-2 text-right", "output", this.display)
         rowA.appendChild(colB)
 
         let rowB = this.buildElement("div", "row", "", "")
@@ -94,15 +103,17 @@ class View {
             let row2 = this.buildElement("div", "row", "", "")
             mainDiv.appendChild(row2)
             for (let j = 0; j < 4; j++) {
-                col = this.buildElement("button", "col border rounded-circle h5 m-1 bg-light", "btn" + k, calcBtns[k]);
+                col = this.buildElement("button", "col rounded-circle h3 m-1 text-white bg-dark", "btn" + k, calcBtns[k]);
                 if (!(k === 1 || k === 2 || k === 17)) {
                     col.addEventListener("click", this.numberClick.bind(this));
-                    col.classList.remove("bg-light")
-                    col.classList.add("bg-white")
                 }
                 if (k === 3 || k === 7 || k === 11 || k === 15 || k === 19) {
-                    col.classList.remove("bg-white")
+                    col.classList.remove("bg-dark")
                     col.classList.add("bg-warning")
+                }
+                if (k === 0 || k === 1 || k === 2) {
+                    col.classList.remove("bg-dark")
+                    col.classList.add("bg-secondary")
                 }
                 k++
                 row2.appendChild(col)
