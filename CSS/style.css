@@ -1,0 +1,11 @@
+body {
+    background-color: black;
+}
+
+.col {
+    min-height: 81px;
+}
+
+.colB {
+    min-height: 100px;
+}

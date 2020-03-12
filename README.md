@@ -1,5 +1,5 @@
 
-# REQUIREMENTS----------------------------------------------------------------------
+# REQUIREMENTS
 
 1. You must not use eval()
 2. The calculator must be Object Oriented, utilizing Class, not Object.prototype
@@ -21,7 +21,7 @@
 12. When the clear button c is pressed, all stored data should be erased and the display should show 0 again.
 
 
-# PSEUDO-CODE----------------------------------------------------------------------
+# PSEUDO-CODE
 
 ## components
 1. atoms:
@@ -46,7 +46,7 @@
 4. Need a place to store all input but not replace
     * should keep each input
     * HOW DO I DO THIS???
-5. 
+  * 
 
 ## pattern
 
