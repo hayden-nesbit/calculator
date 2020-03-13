@@ -42,69 +42,46 @@ class Model {
             this.store = this.firstNum / this.secondNum
             this.view.updateDisplay(this.store)
         }
-
-        if (this.operator === "=") {
-            this.view.updateDisplay(this.store)
-        }
-
     }
 
     updateValue(e) {
         // this is the Model
 
-        let operators = "+x%-=";
+        let operators = "+x%-";
+        //let numbers = "0123456789"
         let arr = []
 
         for (let i = 0; i < this.store.length; i++) {
             for (let j = 0; j < operators.length; j++) {
                 if (this.store[i] === operators[j]) {
                     arr = this.store.split(operators[j])
+                    console.log(arr)
                     this.firstNum = arr[0]
                     this.operator = operators[j]
                     this.secondNum = arr[1]
                 }
-                if (this.firstNum && this.operator && this.secondNum) {
+                if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=") {
                     this.calculate()
                 }
+                console.log(this.firstNum, this.operator, this.secondNum)
+
             }
         }
-
         if (e.target.textContent === "C") {
             this.clear()
             this.view.updateDisplay(this.store);
+        }
+        if (e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%") {
+            this.store += e.target.textContent;
         } else {
             this.store += e.target.textContent;
-            this.view.updateDisplay(this.store);
         }
 
-
-
+        // (e.target.textContent === "0" || "1" || "2" || "3" || "4" || "5" || "6" || "7" || "8" || "9") 
 
     }
 
-
 }
-
-// if (arr.includes('+')) {
-//     this.firstNum = arr.split('+')[0]
-//     this.operator = '+'
-//     this.secondNum = arr.split('+')[1]
-// } else if (arr.includes('-')) {
-//     this.firstNum = arr.split('-')[0]
-//     this.operator = '-'
-//     this.secondNum = arr.split('-')[1]
-// } else if (arr.includes('%')) {
-//     this.firstNum = arr.split('%')[0]
-//     this.operator = '%'
-//     this.secondNum = arr.split('%')[1]
-// } else if (arr.includes('x')) {
-//     this.firstNum = arr.split('x')[0]
-//     this.operator = 'x'
-//     this.secondNum = arr.split('x')[1]
-// }
-
-
-
 
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
