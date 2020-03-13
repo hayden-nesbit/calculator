@@ -22,7 +22,7 @@ class Model {
     }
 
     clear() {
-        this.store = "0";
+        this.store = "0"
         this.view.updateDisplay(this.store);
     }
 }
@@ -35,6 +35,9 @@ class Controller {
         this.currentValue = 0;
         this.__this__ = this
     };
+
+    numbers = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+    operators = ("+", "x", "%", "-", "=")
 
 
 }
@@ -62,15 +65,13 @@ class View {
 
     numberClick(e) {
         if (e.target.textContent === "C") {
-            this.controller.model.clear();
-            this.updateDisplay(this.controller.model.store)
+            this.controller.model.clear()
+            this.updateDisplay(this.controller.model.store);
         } else {
-            this.controller.model.store += e.target.textContent
-            this.updateDisplay(this.controller.model.store)
+            this.controller.model.store += e.target.textContent;
+            this.updateDisplay(Number(this.controller.model.store))
         }
     }
-
-
 
     buildCalculator() {
 
