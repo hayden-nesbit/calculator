@@ -25,97 +25,87 @@ class Model {
         this.view.updateDisplay(this.store);
     }
 
-    doMath() {
+    calculate() {
         if (this.operator === "x") {
-            this.firstNum * secondNum
+            this.store = this.firstNum * this.secondNum
             this.view.updateDisplay(this.store)
         }
         if (this.operator === "-") {
-            this.firstNum - secondNum
+            this.store = this.firstNum - this.secondNum
             this.view.updateDisplay(this.store)
         }
         if (this.operator === "+") {
-            this.firstNum + secondNum
+            this.store = this.firstNum + this.secondNum
             this.view.updateDisplay(this.store)
         }
         if (this.operator === "%") {
-            this.firstNum / secondNum
+            this.store = this.firstNum / this.secondNum
             this.view.updateDisplay(this.store)
         }
+
+        if (this.operator === "=") {
+            this.view.updateDisplay(this.store)
+        }
+
     }
 
-    calculate(e) {
+    updateValue(e) {
         // this is the Model
+
         let operators = "+x%-=";
-
-        if (e.target.textContent === "C") {
-            this.clear()
-            this.view.updateDisplay(this.store);
-
-        } else if (operators.includes(e.target.textContent)) {
-            this.
-        } else {
-            this.store += e.target.textContent;
-            this.view.updateDisplay(this.store)
-        }
-
         let arr = []
+
         for (let i = 0; i < this.store.length; i++) {
             for (let j = 0; j < operators.length; j++) {
                 if (this.store[i] === operators[j]) {
                     arr = this.store.split(operators[j])
-                        //this.doMath(arr)
-                    console.log(arr)
+                    this.firstNum = arr[0]
+                    this.operator = operators[j]
+                    this.secondNum = arr[1]
+                }
+                if (this.firstNum && this.operator && this.secondNum) {
+                    this.calculate()
                 }
             }
         }
 
-        arr = arr.toString()
-
-        if (typeof(arr.split('+')) === 'object') {
-            this.firstNum = arr.split('+')[0]
-            this.operator = '+'
-            this.secondNum = arr.split('+')[1]
-            this.doMath()
-        }
-
-        if (typeof(arr.split('-')) === 'object') {
-            this.firstNum = arr.split('-')[0]
-            this.operator = '-'
-            this.secondNum = arr.split('-')[1]
-            doMath()
-        }
-
-        if (typeof(arr.split('%')) === 'object') {
-            this.firstNum = arr.split('%')[0]
-            this.operator = '%'
-            this.secondNum = arr.split('%')[1]
-            doMath()
-        }
-
-        if (typeof(arr.split('x')) === 'object') {
-            this.firstNum = arr.split('x')[0]
-            this.operator = 'x'
-            this.secondNum = arr.split('x')[1]
-            doMath()
-        }
-
-        if (typeof(arr.split('=')) === 'object') {
-            doMath()
+        if (e.target.textContent === "C") {
+            this.clear()
+            this.view.updateDisplay(this.store);
+        } else {
+            this.store += e.target.textContent;
+            this.view.updateDisplay(this.store);
         }
 
 
-        // } else if (!(isNaN(e.target.textContent))) {
-        //     this.controller.model.store += e.target.textContent;
-        //     this.updateDisplay(Number(this.controller.model.store))
-        // } else
-        // if (e.target.charCode === 37 || e.target.charCode === 43 || e.target.charCode === 45 || e.target.charCode === 120 || e.target.charCode === 61) {
-        //     this.controller.model.store += e.target.charCode;
-        //     this.updateDisplay(this.controller.model.store);
-        // }
+
 
     }
+
+
 }
+
+// if (arr.includes('+')) {
+//     this.firstNum = arr.split('+')[0]
+//     this.operator = '+'
+//     this.secondNum = arr.split('+')[1]
+// } else if (arr.includes('-')) {
+//     this.firstNum = arr.split('-')[0]
+//     this.operator = '-'
+//     this.secondNum = arr.split('-')[1]
+// } else if (arr.includes('%')) {
+//     this.firstNum = arr.split('%')[0]
+//     this.operator = '%'
+//     this.secondNum = arr.split('%')[1]
+// } else if (arr.includes('x')) {
+//     this.firstNum = arr.split('x')[0]
+//     this.operator = 'x'
+//     this.secondNum = arr.split('x')[1]
+// }
+
+
+
+
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
 
@@ -126,7 +116,7 @@ class Controller {
     };
 
     handleClick(e) {
-        this.model.calculate(e);
+        this.model.updateValue(e);
     }
 }
 
@@ -204,8 +194,6 @@ class View {
         row1.appendChild(col3)
     }
 }
-
-
 
 // <------------------------------------------INITIALIZE--------------------------------------------->
 
