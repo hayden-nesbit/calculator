@@ -3,53 +3,107 @@ app.className = "container"
 
 // <------------------------------------------MODEL OBJECT--------------------------------------------->
 
-//needs to start output at "0"
-//needs to store textContent of each btn on click in array
-//needs to update output for value of each click AND store total of all values clicked
-
 class Model {
     constructor() {
         this.view = null;
         this.store = "";
         this.display = 0
-        this.array = [];
+        this.firstNum = null;
+        this.operator = null;
+        this.secondNum = null;
     };
 
     setView(view) {
         this.view = view;
     }
 
-    // updateView(str) {
-    //     this.view.updateView(str);
-    // }
-
     clear() {
         this.store = "0"
+        this.firstNum = null;
+        this.operator = null;
+        this.secondNum = null;
         this.view.updateDisplay(this.store);
+    }
+
+    doMath() {
+        if (this.operator === "x") {
+            this.firstNum * secondNum
+            this.view.updateDisplay(this.store)
+        }
+        if (this.operator === "-") {
+            this.firstNum - secondNum
+            this.view.updateDisplay(this.store)
+        }
+        if (this.operator === "+") {
+            this.firstNum + secondNum
+            this.view.updateDisplay(this.store)
+        }
+        if (this.operator === "%") {
+            this.firstNum / secondNum
+            this.view.updateDisplay(this.store)
+        }
     }
 
     calculate(e) {
         // this is the Model
-        let numbers = ("0123456789");
-        let operators = ("+x%-=");
+        let operators = "+x%-=";
 
         if (e.target.textContent === "C") {
             this.clear()
             this.view.updateDisplay(this.store);
+
+        } else if (operators.includes(e.target.textContent)) {
+            this.
         } else {
             this.store += e.target.textContent;
             this.view.updateDisplay(this.store)
         }
+
+        let arr = []
         for (let i = 0; i < this.store.length; i++) {
             for (let j = 0; j < operators.length; j++) {
-                if (this.store[i] === operators[i]) {
-                    this.store.split(operators[i])
-                        // this.array
+                if (this.store[i] === operators[j]) {
+                    arr = this.store.split(operators[j])
+                        //this.doMath(arr)
+                    console.log(arr)
                 }
-                console.log(this.store)
             }
-
         }
+
+        arr = arr.toString()
+
+        if (typeof(arr.split('+')) === 'object') {
+            this.firstNum = arr.split('+')[0]
+            this.operator = '+'
+            this.secondNum = arr.split('+')[1]
+            this.doMath()
+        }
+
+        if (typeof(arr.split('-')) === 'object') {
+            this.firstNum = arr.split('-')[0]
+            this.operator = '-'
+            this.secondNum = arr.split('-')[1]
+            doMath()
+        }
+
+        if (typeof(arr.split('%')) === 'object') {
+            this.firstNum = arr.split('%')[0]
+            this.operator = '%'
+            this.secondNum = arr.split('%')[1]
+            doMath()
+        }
+
+        if (typeof(arr.split('x')) === 'object') {
+            this.firstNum = arr.split('x')[0]
+            this.operator = 'x'
+            this.secondNum = arr.split('x')[1]
+            doMath()
+        }
+
+        if (typeof(arr.split('=')) === 'object') {
+            doMath()
+        }
+
 
         // } else if (!(isNaN(e.target.textContent))) {
         //     this.controller.model.store += e.target.textContent;
@@ -61,7 +115,6 @@ class Model {
         // }
 
     }
-
 }
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
@@ -75,11 +128,9 @@ class Controller {
     handleClick(e) {
         this.model.calculate(e);
     }
-
-
 }
 
-// <------------------------------------------UI - VISUAL CALCULATOR OBJECT--------------------------------------------->
+// <-----------------------------------------------VIEW OBJECT (UI)------------------------------------------------->
 
 class View {
     constructor(controller) {
