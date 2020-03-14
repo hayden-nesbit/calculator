@@ -28,19 +28,31 @@ class Model {
     calculate() {
         if (this.operator === "x") {
             this.store = this.firstNum * this.secondNum
-            this.view.updateDisplay(this.store)
+            this.firstNum = this.store
+            this.operator = null;
+            this.secondNum = null;
+            this.view.updateDisplay(this.firstNum)
         }
         if (this.operator === "-") {
             this.store = this.firstNum - this.secondNum
-            this.view.updateDisplay(this.store)
+            this.firstNum = this.store
+            this.operator = null;
+            this.secondNum = null;
+            this.view.updateDisplay(this.firstNum)
         }
         if (this.operator === "+") {
             this.store = this.firstNum + this.secondNum
-            this.view.updateDisplay(this.store)
+            this.firstNum = this.store
+            this.operator = null;
+            this.secondNum = null;
+            this.view.updateDisplay(this.firstNum)
         }
         if (this.operator === "%") {
             this.store = this.firstNum / this.secondNum
-            this.view.updateDisplay(this.store)
+            this.firstNum = this.store
+            this.operator = null;
+            this.secondNum = null;
+            this.view.updateDisplay(this.firstNum)
         }
     }
 
@@ -61,16 +73,19 @@ class Model {
                     this.secondNum = arr[1]
                 }
 
-
-
             }
+
         }
+
         if (e.target.textContent === "C") {
             this.clear()
             this.view.updateDisplay(this.store);
         } else if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%") {
             this.store += e.target.textContent;
             this.calculate()
+        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%")) {
+            this.store += e.target.textContent;
+            this.view.updateDisplay(e.target.textContent)
         } else {
             this.store += e.target.textContent;
             this.view.updateDisplay(this.store)
@@ -80,6 +95,7 @@ class Model {
     }
 
 }
+
 
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
