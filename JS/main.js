@@ -60,25 +60,23 @@ class Model {
                     this.operator = operators[j]
                     this.secondNum = arr[1]
                 }
-                if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=") {
-                    this.calculate()
-                }
-                console.log(this.firstNum, this.operator, this.secondNum)
+
+
 
             }
         }
         if (e.target.textContent === "C") {
             this.clear()
             this.view.updateDisplay(this.store);
-        }
-        if (e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%") {
+        } else if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%") {
             this.store += e.target.textContent;
+            this.calculate()
         } else {
             this.store += e.target.textContent;
+            this.view.updateDisplay(this.store)
         }
 
-        // (e.target.textContent === "0" || "1" || "2" || "3" || "4" || "5" || "6" || "7" || "8" || "9") 
-
+        console.log(this.firstNum, this.operator, this.secondNum)
     }
 
 }
