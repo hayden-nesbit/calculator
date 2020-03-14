@@ -41,7 +41,7 @@ class Model {
             this.view.updateDisplay(this.firstNum)
         }
         if (this.operator === "+") {
-            this.store = this.firstNum + this.secondNum
+            this.store = +this.firstNum + +this.secondNum
             this.firstNum = this.store
             this.operator = null;
             this.secondNum = null;
@@ -59,7 +59,7 @@ class Model {
     updateValue(e) {
         // this is the Model
 
-        let operators = "+x%-";
+        let operators = "+x%-=";
         //let numbers = "0123456789"
         let arr = []
 
@@ -72,9 +72,7 @@ class Model {
                     this.operator = operators[j]
                     this.secondNum = arr[1]
                 }
-
             }
-
         }
 
         if (e.target.textContent === "C") {
@@ -91,7 +89,9 @@ class Model {
             this.view.updateDisplay(this.store)
         }
 
-        console.log(this.firstNum, this.operator, this.secondNum)
+        if (this.clickCount < 0)
+
+            console.log(this.firstNum, this.operator, this.secondNum)
     }
 
 }
