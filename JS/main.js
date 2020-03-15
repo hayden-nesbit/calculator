@@ -83,15 +83,14 @@ class Model {
             this.calculate()
         } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%")) {
             this.store += e.target.textContent;
-            this.view.updateDisplay(e.target.textContent)
+            this.view.updateDisplay(this.store)
         } else {
-            this.store += e.target.textContent;
+            this.store = e.target.textContent;
             this.view.updateDisplay(this.store)
         }
 
-        if (this.clickCount < 0)
 
-            console.log(this.firstNum, this.operator, this.secondNum)
+        console.log(this.firstNum, this.operator, this.secondNum)
     }
 
 }
