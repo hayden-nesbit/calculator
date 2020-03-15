@@ -8,6 +8,7 @@ class Model {
         this.view = null;
         this.store = "";
         this.display = 0
+        this.clickCount = 0;
         this.firstNum = null;
         this.operator = null;
         this.secondNum = null;
@@ -26,6 +27,11 @@ class Model {
     }
 
     calculate() {
+        if (this.operator === "%") {
+            this.store = this.store / 100
+            this.view.updateDisplay(this.store)
+        }
+
         if (this.operator === "x") {
             this.store = this.firstNum * this.secondNum
             this.firstNum = this.store
@@ -47,19 +53,20 @@ class Model {
             this.secondNum = null;
             this.view.updateDisplay(this.firstNum)
         }
-        if (this.operator === "%") {
+        if (this.operator === "/") {
             this.store = this.firstNum / this.secondNum
             this.firstNum = this.store
             this.operator = null;
             this.secondNum = null;
             this.view.updateDisplay(this.firstNum)
         }
+
     }
 
     updateValue(e) {
         // this is the Model
 
-        let operators = "+x%-=";
+        let operators = "+x/%-=";
         //let numbers = "0123456789"
         let arr = []
 
@@ -67,7 +74,6 @@ class Model {
             for (let j = 0; j < operators.length; j++) {
                 if (this.store[i] === operators[j]) {
                     arr = this.store.split(operators[j])
-                    console.log(arr)
                     this.firstNum = arr[0]
                     this.operator = operators[j]
                     this.secondNum = arr[1]
@@ -78,22 +84,26 @@ class Model {
         if (e.target.textContent === "C") {
             this.clear()
             this.view.updateDisplay(this.store);
-        } else if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%") {
+        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%") && this.clickCount > 0) {
+            this.store += e.target.textContent;
+            this.display = e.target.textContent
+            this.view.updateDisplay(this.display)
+        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%")) {
+            this.store += e.target.textContent;
+            this.view.updateDisplay(this.store)
+        } else if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/") {
             this.store += e.target.textContent;
             this.calculate()
-        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%")) {
-            this.store += e.target.textContent;
-            this.view.updateDisplay(this.store)
-        } else {
-            this.store += e.target.textContent;
-            this.view.updateDisplay(this.store)
         }
 
-
         console.log(this.firstNum, this.operator, this.secondNum)
-    }
 
+
+
+    }
 }
+
+
 
 
 
@@ -107,6 +117,10 @@ class Controller {
 
     handleClick(e) {
         this.model.updateValue(e);
+        if (e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "=") {
+            this.model.clickCount++
+        }
+
     }
 }
 
@@ -156,7 +170,7 @@ class View {
         let rowB = this.buildElement("div", "row", "", "")
         mainDiv.appendChild(rowB)
 
-        let calcBtns = ["C", " ", " ", "%", "7", "8", "9", "x", "4", "5", "6", "-", "1", "2", "3", "+", "0", " ", ".", "="]
+        let calcBtns = ["C", " ", "%", "/", "7", "8", "9", "x", "4", "5", "6", "-", "1", "2", "3", "+", "0", " ", ".", "="]
         let k = 0;
         let col;
         for (let i = 0; i < 5; i++) {
