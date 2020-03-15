@@ -27,10 +27,10 @@ class Model {
     }
 
     calculate() {
-        if (this.operator === "%") {
-            this.store = this.store / 100
-            this.view.updateDisplay(this.store)
-        }
+        // if (e.target.textContent === "%") {
+        //     this.store = this.store / 100
+        //     this.view.updateDisplay(this.store)
+        // }
 
         if (this.operator === "x") {
             this.store = this.firstNum * this.secondNum
@@ -66,7 +66,7 @@ class Model {
     updateValue(e) {
         // this is the Model
 
-        let operators = "+x/%-=";
+        let operators = "+x/-=";
         //let numbers = "0123456789"
         let arr = []
 
@@ -85,9 +85,12 @@ class Model {
             this.clear()
             this.view.updateDisplay(this.store);
         } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%") && this.clickCount > 0) {
-            this.store += e.target.textContent;
-            this.display = e.target.textContent
-            this.view.updateDisplay(this.display)
+            if (this.store == "0") {
+                this.store = e.target.textContent;
+            } else {
+                this.store += e.target.textContent;
+            }
+            this.view.updateDisplay(this.store);
         } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%")) {
             this.store += e.target.textContent;
             this.view.updateDisplay(this.store)
@@ -96,15 +99,9 @@ class Model {
             this.calculate()
         }
 
-        console.log(this.firstNum, this.operator, this.secondNum)
-
-
-
+        console.log(this.store)
     }
 }
-
-
-
 
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
