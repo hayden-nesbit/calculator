@@ -85,7 +85,7 @@ class Model {
             this.store += e.target.textContent;
             this.view.updateDisplay(this.store)
         } else {
-            this.store = e.target.textContent;
+            this.store += e.target.textContent;
             this.view.updateDisplay(this.store)
         }
 
