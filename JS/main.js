@@ -3,29 +3,99 @@ app.className = "container"
 
 // <------------------------------------------MODEL OBJECT--------------------------------------------->
 
-//needs to start output at "0"
-//needs to store textContent of each btn on click in array
-//needs to update output for value of each click AND store total of all values clicked
-
 class Model {
     constructor() {
         this.view = null;
         this.store = "";
+        this.display = 0
+        this.firstNum = null;
+        this.operator = null;
+        this.secondNum = null;
     };
 
     setView(view) {
         this.view = view;
     }
 
-    updateView(str) {
-        this.view.updateView(str);
-    }
-
     clear() {
         this.store = "0"
+        this.firstNum = null;
+        this.operator = null;
+        this.secondNum = null;
         this.view.updateDisplay(this.store);
     }
+
+    calculate() {
+        if (this.operator === "x") {
+            this.store = this.firstNum * this.secondNum
+            this.firstNum = this.store
+            this.operator = null;
+            this.secondNum = null;
+            this.view.updateDisplay(this.firstNum)
+        }
+        if (this.operator === "-") {
+            this.store = this.firstNum - this.secondNum
+            this.firstNum = this.store
+            this.operator = null;
+            this.secondNum = null;
+            this.view.updateDisplay(this.firstNum)
+        }
+        if (this.operator === "+") {
+            this.store = +this.firstNum + +this.secondNum
+            this.firstNum = this.store
+            this.operator = null;
+            this.secondNum = null;
+            this.view.updateDisplay(this.firstNum)
+        }
+        if (this.operator === "%") {
+            this.store = this.firstNum / this.secondNum
+            this.firstNum = this.store
+            this.operator = null;
+            this.secondNum = null;
+            this.view.updateDisplay(this.firstNum)
+        }
+    }
+
+    updateValue(e) {
+        // this is the Model
+
+        let operators = "+x%-=";
+        //let numbers = "0123456789"
+        let arr = []
+
+        for (let i = 0; i < this.store.length; i++) {
+            for (let j = 0; j < operators.length; j++) {
+                if (this.store[i] === operators[j]) {
+                    arr = this.store.split(operators[j])
+                    console.log(arr)
+                    this.firstNum = arr[0]
+                    this.operator = operators[j]
+                    this.secondNum = arr[1]
+                }
+            }
+        }
+
+        if (e.target.textContent === "C") {
+            this.clear()
+            this.view.updateDisplay(this.store);
+        } else if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%") {
+            this.store += e.target.textContent;
+            this.calculate()
+        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%")) {
+            this.store += e.target.textContent;
+            this.view.updateDisplay(this.store)
+        } else {
+            this.store = e.target.textContent;
+            this.view.updateDisplay(this.store)
+        }
+
+
+        console.log(this.firstNum, this.operator, this.secondNum)
+    }
+
 }
+
+
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
 
@@ -33,21 +103,18 @@ class Controller {
     constructor(model) {
         this.model = model
         this.currentValue = 0;
-        this.__this__ = this
     };
 
-    numbers = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
-    operators = ("+", "x", "%", "-", "=")
-
-
+    handleClick(e) {
+        this.model.updateValue(e);
+    }
 }
 
-// <------------------------------------------UI - VISUAL CALCULATOR OBJECT--------------------------------------------->
+// <-----------------------------------------------VIEW OBJECT (UI)------------------------------------------------->
 
 class View {
     constructor(controller) {
         this.controller = controller;
-        this.display = 0
     };
 
     buildElement(elementType, classes, id, textContent) {
@@ -59,18 +126,8 @@ class View {
     }
 
     updateDisplay(currentValue) {
-        this.display = currentValue
-        document.getElementById("output").innerHTML = this.display
-    }
-
-    numberClick(e) {
-        if (e.target.textContent === "C") {
-            this.controller.model.clear()
-            this.updateDisplay(this.controller.model.store);
-        } else {
-            this.controller.model.store += e.target.textContent;
-            this.updateDisplay(Number(this.controller.model.store))
-        }
+        this.controller.model.display = currentValue
+        document.getElementById("output").innerHTML = this.controller.model.display
     }
 
     buildCalculator() {
@@ -93,7 +150,7 @@ class View {
         let rowA = this.buildElement("div", "row", "", "")
         mainDiv.appendChild(rowA)
 
-        let colB = this.buildElement("div", "col-md-12 rounded mb-2 text-right", "output", this.display)
+        let colB = this.buildElement("div", "col-md-12 rounded mb-2 text-right", "output", this.controller.model.display)
         rowA.appendChild(colB)
 
         let rowB = this.buildElement("div", "row", "", "")
@@ -108,7 +165,7 @@ class View {
             for (let j = 0; j < 4; j++) {
                 col = this.buildElement("button", "col rounded-circle h3 m-1 text-white bg-dark", "btn" + k, calcBtns[k]);
                 if (!(k === 1 || k === 2 || k === 17)) {
-                    col.addEventListener("click", this.numberClick.bind(this));
+                    col.addEventListener("click", this.controller.handleClick.bind(this.controller));
                 }
                 if (k === 3 || k === 7 || k === 11 || k === 15 || k === 19) {
                     col.classList.remove("bg-dark")
@@ -127,8 +184,6 @@ class View {
         row1.appendChild(col3)
     }
 }
-
-
 
 // <------------------------------------------INITIALIZE--------------------------------------------->
 
