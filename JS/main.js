@@ -6,11 +6,11 @@ app.className = "container"
 class Model {
     constructor() {
         this.view = null;
-        this.store = "";
-        this.display = 0
-        this.firstNum = null;
-        this.operator = null;
-        this.secondNum = null;
+        this.display = "0";
+        this.clickCount = 0;
+        this.firstNum = 0;
+        this.operator = "";
+        this.secondNum = 0;
     };
 
     setView(view) {
@@ -18,56 +18,51 @@ class Model {
     }
 
     clear() {
-        this.store = "0"
-        this.firstNum = null;
-        this.operator = null;
-        this.secondNum = null;
-        this.view.updateDisplay(this.store);
+        this.display = "0"
+        this.firstNum = 0;
+        this.operator = "";
+        this.secondNum = 0;
+        this.view.updateDisplay(this.display);
     }
 
     calculate() {
+        // if (e.target.textContent === "%") {
+        //     this.display = this.display / 100
+        //     this.view.updateDisplay(this.display)
+        // }
+
+
+
         if (this.operator === "x") {
-            this.store = this.firstNum * this.secondNum
-            this.firstNum = this.store
-            this.operator = null;
-            this.secondNum = null;
-            this.view.updateDisplay(this.firstNum)
+            this.display = this.firstNum * this.secondNum
+            this.view.updateDisplay(this.display)
         }
         if (this.operator === "-") {
-            this.store = this.firstNum - this.secondNum
-            this.firstNum = this.store
-            this.operator = null;
-            this.secondNum = null;
-            this.view.updateDisplay(this.firstNum)
+            this.display = this.firstNum - this.secondNum
+            this.view.updateDisplay(this.display)
         }
         if (this.operator === "+") {
-            this.store = +this.firstNum + +this.secondNum
-            this.firstNum = this.store
-            this.operator = null;
-            this.secondNum = null;
-            this.view.updateDisplay(this.firstNum)
+            this.display = +this.firstNum + +this.secondNum
+            this.view.updateDisplay(this.display)
         }
-        if (this.operator === "%") {
-            this.store = this.firstNum / this.secondNum
-            this.firstNum = this.store
-            this.operator = null;
-            this.secondNum = null;
-            this.view.updateDisplay(this.firstNum)
+        if (this.operator === "/") {
+            this.display = this.firstNum / this.secondNum
+            this.view.updateDisplay(this.display)
         }
+        this.firstNum = this.display
+
     }
 
     updateValue(e) {
         // this is the Model
 
-        let operators = "+x%-=";
-        //let numbers = "0123456789"
+        let operators = "+x/-=";
         let arr = []
 
-        for (let i = 0; i < this.store.length; i++) {
+        for (let i = 0; i < this.display.length; i++) {
             for (let j = 0; j < operators.length; j++) {
-                if (this.store[i] === operators[j]) {
-                    arr = this.store.split(operators[j])
-                    console.log(arr)
+                if (this.display[i] === operators[j]) {
+                    arr = this.display.split(operators[j])
                     this.firstNum = arr[0]
                     this.operator = operators[j]
                     this.secondNum = arr[1]
@@ -77,26 +72,50 @@ class Model {
 
         if (e.target.textContent === "C") {
             this.clear()
-            this.view.updateDisplay(this.store);
-        } else if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%") {
-            this.store += e.target.textContent;
+            this.view.updateDisplay(this.display);
+
+        } else if (!(e.target.textContent === "=" ||
+                e.target.textContent === "+" ||
+                e.target.textContent === "-" ||
+                e.target.textContent === "x" ||
+                e.target.textContent === "/" ||
+                e.target.textContent === "%") &&
+            !this.operator) {
+            console.log("first number")
+            if (this.display == "0") {
+                this.display = e.target.textContent;
+                this.firstNum = e.target.textContent
+            } else {
+                this.display += e.target.textContent;
+                this.firstNum += e.target.textContent
+            }
+            this.view.updateDisplay(this.display);
+
+        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%") && this.operator) {
+            console.log("second number")
+            if (this.display == "0") {
+                this.display = e.target.textContent;
+                this.secondNum = e.target.textContent
+            } else {
+                this.display += e.target.textContent;
+                this.secondNum += e.target.textContent
+            }
+            this.view.updateDisplay(this.display);
+
+
+        } else if ((e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/") && !this.operator) {
+            this.display = "0"
+            this.operator = e.target.textContent
+
+        } else if ((e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/") && this.operator) {
             this.calculate()
-        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "%")) {
-            this.store += e.target.textContent;
-            this.view.updateDisplay(e.target.textContent)
-        } else {
-            this.store += e.target.textContent;
-            this.view.updateDisplay(this.store)
+
         }
 
-        if (this.clickCount < 0)
+        console.log(this.firstNum, this.operator, this.secondNum)
 
-            console.log(this.firstNum, this.operator, this.secondNum)
     }
-
 }
-
-
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
 
@@ -157,7 +176,7 @@ class View {
         let rowB = this.buildElement("div", "row", "", "")
         mainDiv.appendChild(rowB)
 
-        let calcBtns = ["C", " ", " ", "%", "7", "8", "9", "x", "4", "5", "6", "-", "1", "2", "3", "+", "0", " ", ".", "="]
+        let calcBtns = ["C", " ", "%", "/", "7", "8", "9", "x", "4", "5", "6", "-", "1", "2", "3", "+", "0", " ", ".", "="]
         let k = 0;
         let col;
         for (let i = 0; i < 5; i++) {
