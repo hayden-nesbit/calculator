@@ -9,9 +9,9 @@ class Model {
         this.store = "";
         this.display = 0
         this.clickCount = 0;
-        this.firstNum = null;
-        this.operator = null;
-        this.secondNum = null;
+        this.firstNum = 0;
+        this.operator = "";
+        this.secondNum = 0;
     };
 
     setView(view) {
@@ -20,9 +20,9 @@ class Model {
 
     clear() {
         this.store = "0"
-        this.firstNum = null;
-        this.operator = null;
-        this.secondNum = null;
+        this.firstNum = 0;
+        this.operator = "";
+        this.secondNum = 0;
         this.view.updateDisplay(this.store);
     }
 
@@ -34,31 +34,19 @@ class Model {
 
         if (this.operator === "x") {
             this.store = this.firstNum * this.secondNum
-            this.firstNum = this.store
-            this.operator = null;
-            this.secondNum = null;
-            this.view.updateDisplay(this.firstNum)
+            this.view.updateDisplay(this.store)
         }
         if (this.operator === "-") {
             this.store = this.firstNum - this.secondNum
-            this.firstNum = this.store
-            this.operator = null;
-            this.secondNum = null;
-            this.view.updateDisplay(this.firstNum)
+            this.view.updateDisplay(this.store)
         }
         if (this.operator === "+") {
             this.store = +this.firstNum + +this.secondNum
-            this.firstNum = this.store
-            this.operator = null;
-            this.secondNum = null;
-            this.view.updateDisplay(this.firstNum)
+            this.view.updateDisplay(this.store)
         }
         if (this.operator === "/") {
             this.store = this.firstNum / this.secondNum
-            this.firstNum = this.store
-            this.operator = null;
-            this.secondNum = null;
-            this.view.updateDisplay(this.firstNum)
+            this.view.updateDisplay(this.store)
         }
 
     }
@@ -84,25 +72,53 @@ class Model {
         if (e.target.textContent === "C") {
             this.clear()
             this.view.updateDisplay(this.store);
-        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%") && this.clickCount > 0) {
+
+        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%") && !this.operator) {
+            console.log("first number")
             if (this.store == "0") {
                 this.store = e.target.textContent;
+                this.firstNum = e.target.textContent
             } else {
                 this.store += e.target.textContent;
+                this.firstNum += e.target.textContent
             }
             this.view.updateDisplay(this.store);
-        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%")) {
-            this.store += e.target.textContent;
-            this.view.updateDisplay(this.store)
-        } else if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/") {
-            this.store += e.target.textContent;
+
+        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%") && this.operator) {
+            console.log("second number")
+            if (this.store == "0") {
+                this.store = e.target.textContent;
+                this.secondNum = e.target.textContent
+            } else {
+                this.store += e.target.textContent;
+                this.secondNum += e.target.textContent
+            }
+            this.view.updateDisplay(this.store);
+
+
+
+
+            // } else if (this.firstNum && this.operator && this.secondNum && e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/") {
+
+            //     this.view.updateDisplay(this.store);
+
+
+        } else if (e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" && !this.operator) {
+            this.store = "0"
+            this.operator = e.target.textContent
+
+        } else if (e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" && this.operator) {
+            this.store = "0"
+            this.operator = e.target.textContent
             this.calculate()
+
         }
 
-        console.log(this.store)
+
+        console.log(this.firstNum, this.operator, this.secondNum)
+
     }
 }
-
 
 // <------------------------------------------CONTROLLER OBJECT (BUTTONS)--------------------------------------------->
 
