@@ -31,8 +31,7 @@ class Model {
         //     this.view.updateDisplay(this.display)
         // }
 
-        this.firstNum = this.display
-            //this.secondNum = this.display
+
 
         if (this.operator === "x") {
             this.display = this.firstNum * this.secondNum
@@ -50,6 +49,7 @@ class Model {
             this.display = this.firstNum / this.secondNum
             this.view.updateDisplay(this.display)
         }
+        this.firstNum = this.display
 
     }
 
@@ -57,7 +57,6 @@ class Model {
         // this is the Model
 
         let operators = "+x/-=";
-        //let numbers = "0123456789"
         let arr = []
 
         for (let i = 0; i < this.display.length; i++) {
@@ -75,7 +74,13 @@ class Model {
             this.clear()
             this.view.updateDisplay(this.display);
 
-        } else if (!(e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "%") && !this.operator) {
+        } else if (!(e.target.textContent === "=" ||
+                e.target.textContent === "+" ||
+                e.target.textContent === "-" ||
+                e.target.textContent === "x" ||
+                e.target.textContent === "/" ||
+                e.target.textContent === "%") &&
+            !this.operator) {
             console.log("first number")
             if (this.display == "0") {
                 this.display = e.target.textContent;
@@ -98,15 +103,14 @@ class Model {
             this.view.updateDisplay(this.display);
 
 
-        } else if ((e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/") && this.operator == "") {
+        } else if ((e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/") && !this.operator) {
             this.display = "0"
             this.operator = e.target.textContent
 
-        } else if ((e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/") && this.operator != "") {
+        } else if ((e.target.textContent === "=" || e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/") && this.operator) {
             this.calculate()
 
         }
-
 
         console.log(this.firstNum, this.operator, this.secondNum)
 
@@ -123,10 +127,6 @@ class Controller {
 
     handleClick(e) {
         this.model.updateValue(e);
-        if (e.target.textContent === "+" || e.target.textContent === "-" || e.target.textContent === "x" || e.target.textContent === "/" || e.target.textContent === "=") {
-            this.model.clickCount++
-        }
-
     }
 }
 
